@@ -1,5 +1,6 @@
+
 lazy val mainSettings = Seq(
-  name := "dz6",
+  name := "data-api-app",
   version := "0.1.0",
   organization := "com.example",
   scalaVersion := "2.12.8"
@@ -16,7 +17,6 @@ lazy val parser = (project in file(".")).
       "org.apache.spark" %% "spark-sql" % sparkVersion,
       "org.apache.logging.log4j" % "log4j-api" % "2.4.1",
       "org.apache.logging.log4j" % "log4j-core" % "2.4.1",
-      "org.scalatest" %% "scalatest" % "3.2.2",
-      "com.github.mrpowers" %% "spark-fast-tests" % "1.1.0" % "test"
+      "org.postgresql" % "postgresql" % "42.2.2"
     )
   }

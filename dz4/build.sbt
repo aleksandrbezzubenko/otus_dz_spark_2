@@ -1,22 +1,28 @@
 
-lazy val mainSettings = Seq(
-  name := "data-api-app",
-  version := "0.1.0",
-  organization := "com.example",
-  scalaVersion := "2.12.8"
+ThisBuild / version := "1.0"
+
+ThisBuild / scalaVersion := "2.12.15"
+
+val sparkVersion = "3.2.1"
+
+lazy val circeDependencies = Seq(
+  "io.circe" %% "circe-core",
+  "io.circe" %% "circe-generic",
+  "io.circe" %% "circe-parser"
+).map(_ % "0.11.2")
+
+lazy val sparkDependencies = Seq(
+  "org.apache.spark"         %% "spark-sql"            % sparkVersion,
+  "org.apache.spark"         %% "spark-streaming"      % sparkVersion,
+  "org.apache.spark"         %% "spark-sql-kafka-0-10" % "3.2.0",
+  "org.apache.logging.log4j" % "log4j-core"            % "2.20.0",
+  "io.netty"          % "netty-all"                   % "4.1.97.Final"
 )
 
-val sparkVersion = "2.4.7"
-lazy val parser = (project in file(".")).
-  settings(mainSettings: _*).
-  settings {
-    libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % "1.2.3",
-      "com.typesafe.scala-logging" %% "scala-logging" % "3.8.0",
-      "org.apache.spark" %% "spark-core" % sparkVersion,
-      "org.apache.spark" %% "spark-sql" % sparkVersion,
-      "org.apache.logging.log4j" % "log4j-api" % "2.4.1",
-      "org.apache.logging.log4j" % "log4j-core" % "2.4.1",
-      "org.postgresql" % "postgresql" % "42.2.2"
-    )
-  }
+lazy val root = (project in file("."))
+  .settings(
+    name := "dz4",
+    libraryDependencies ++= sparkDependencies ++ circeDependencies,
+    javacOptions ++= Seq("-source", "1.8"),
+    compileOrder := CompileOrder.JavaThenScala
+  )
