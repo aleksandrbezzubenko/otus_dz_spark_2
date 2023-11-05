@@ -2,7 +2,7 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.types.StructType
 
-object Main extends App {
+object Csv2Kafka extends App {
 
   val spark = SparkSession
     .builder()
@@ -24,7 +24,7 @@ object Main extends App {
     .format("csv")
     .schema(userSchema)
     .load("src/main/resources/bestsellers.csv")
-     .withColumnRenamed("User Rating", "rating")
+    .withColumnRenamed("User Rating", "Rating")
     .as[Book]
     .toJSON
     .selectExpr("CAST(value as STRING)")
@@ -35,20 +35,5 @@ object Main extends App {
     .option("topic", "test")
     .option("checkpointLocation", "checkDir")
     .start()
-
-  spark.readStream
-    .format("kafka")
-    .option("kafka.bootstrap.servers", "localhost:29092")
-    .option("topic", "test")
-    .load()
-    .filter(col("rating") >= 4.0)
-    .coalesce(1)
-    .writeStream
-    .format("parquet")
-    .outputMode("append")
-    .option("path", "parquet_test")
-    .option("checkpointLocation", "checkDir2")
-    .start()
-
 
 }
