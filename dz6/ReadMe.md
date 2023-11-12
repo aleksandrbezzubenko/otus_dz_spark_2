@@ -88,7 +88,8 @@
     SELECT apOrg.state, COUNT(flightid) AS flights_cnt 
     FROM otus.flights fl 
     JOIN otus.airports apOrg ON(fl.originairportid = ap.airport_id)
-    JOIN otus.airports apDst ON(fl.destairportid = ap.airport_id) 
-    WHERE apOrg.state = apDst.state 
-    GROUP BY apOrg.state 
-    ORDER BY flights_cnt DESC;
+
+### Задание 6. Найти количество рейсов по дням недели.
+    CREATE MATIRIALIZED TABLE otus.max_orders_in_country AS 
+    SELECT apOrg.state, COUNT(flightid) OVER (PARTITION BY dayofweek) AS flights_cnt 
+    FROM otus.flights fl;
